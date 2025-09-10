@@ -1,0 +1,34 @@
+# Python / Backend
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+env/
+venv/
+*.egg-info/
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+.vite/
+.vscode/
+
+# Logs
+*.log
+
+# Env files
+.env
+.env.*
+frontend/.env
+frontend/.env.local
+frontend/.env.*local
+
+# Frappe Bench extras
+sites/assets/
+sites/*/public/
+sites/*/private/
+sites/*/logs/
+sites/*/backups/

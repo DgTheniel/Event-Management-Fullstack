@@ -1,0 +1,25 @@
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "./Dashboard";
+import ManagementApp from "./ManagementApp";
+import Header from "../../components/Header";
+import Venues from "./Venues";
+import Bookings from "./Bookings";
+import Analytics from "./Analytics";
+
+export default function Management() {
+  return (
+    <div className="min-h-screen bg-managementBg">
+      <Header />
+      <div className="p-6">
+        <Routes>
+          <Route index element={<Dashboard />} />
+          <Route path="events" element={<ManagementApp />} />
+          <Route path="venues" element={<Venues />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,16 @@
+import React from "react";
+import { FrappeProvider } from "frappe-react-sdk";
+
+type Props = { children: React.ReactNode };
+
+export default function FrappeWrapper({ children }: Props) {
+  return (
+    <FrappeProvider
+      url={import.meta.env.VITE_FRAPPE_BASE_URL || "http://localhost:8000"}
+      token={undefined}
+      enableSocket={false}
+    >
+      {children}
+    </FrappeProvider>
+  );
+}

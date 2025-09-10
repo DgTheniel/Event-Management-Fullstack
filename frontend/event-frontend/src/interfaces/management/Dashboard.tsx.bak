@@ -1,0 +1,108 @@
+import React, { useMemo } from "react";
+import { useFrappeGetDocList } from "frappe-react-sdk";
+
+// Helper to format date (YYYY-MM-DD -> MM/DD/YYYY)
+const fmtDate = (d?: string) => {
+  if (!d) return "—";
+  try {
+    const date = new Date(d);
+    const month = date.getMonth() + 1; // getMonth() returns 0-11
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  } catch {
+    return d;
+  }
+};
+
+export default function Dashboard() {
+  // Fetch Custom Event docs from Frappe
+  const { data: events, isLoading, error } = useFrappeGetDocList<any>("Custom Event", {
+    fields: ["name", "event_name", "description", "start_date", "end_date", "capacity", "venue"],
+    orderBy: { field: "start_date", order: "desc" },
+    limit: 100,
+  });
+
+  // Fetch Venue docs to map venue IDs to venue_name
+  const { data: venues } = useFrappeGetDocList<any>("Venue", {
+    fields: ["name", "venue_name"],
+    limit: 200,
+  });
+
+  // Create a map from venue ID to venue_name
+  const venueMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    if (Array.isArray(venues)) {
+      venues.forEach((v) => {
+        if (v.name && v.venue_name) {
+          map[v.name] = v.venue_name;
+        }
+      });
+    }
+    return map;
+  }, [venues]);
+
+  return (
+    <div className="bg-managementBg min-h-screen">
+      <div className="app-container">
+        <main className="p-6">
+          <header className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          </header>
+
+          <section>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-2">All Events</h2>
+            <p className="text-gray-600 text-lg mb-6">Comprehensive list of all events with details</p>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-managementAccent"></div>
+              </div>
+            ) : error ? (
+              <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-center">
+                  <div className="text-6xl mb-4">⚠️</div>
+                  <div className="text-red-500 text-lg mb-4 font-semibold">Error loading events</div>
+                  <p className="text-gray-600">Please try again later.</p>
+                </div>
+              </div>
+            ) : !events || events.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">📅</div>
+                <div className="text-gray-500 text-2xl mb-2 font-semibold">No events found</div>
+                <p className="text-gray-400 text-lg">Events will appear here once they are created.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">#</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Event Name</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Dates</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Capacity</th>
+                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Venue</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {events.map((e: any, i: number) => (
+                      <tr key={e.name ?? i} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{i + 1}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-gray-900 font-bold">{e.event_name ?? "—"}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {fmtDate(e.start_date)} → {fmtDate(e.end_date)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{e.capacity ?? "—"}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{venueMap[e.venue] ?? e.venue ?? "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+}

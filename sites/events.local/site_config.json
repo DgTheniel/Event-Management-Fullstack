@@ -1,0 +1,10 @@
+{
+ "db_name": "_41841d24d23d0784",
+ "db_password": "A5cCyjr0K9DAMjBK",
+ "db_type": "mariadb",
+ "developer_mode": 1,
+ "encryption_key": "fTS0bdfdthXZYZC109bYMWSPwP049dN7PNwx_QtIK44=",
+ "installed_apps": [
+  "frappe"
+ ]
+}
