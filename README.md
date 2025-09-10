@@ -180,7 +180,7 @@ A **React + TypeScript + Vite frontend application** with dual-interface design:
 
 ## Screenshots
 
-📌 Screenshots of Public Interface (Event Cards) and Management Dashboard are included in the `screenshots/` folder.
+📌 Screenshots of Public Interface (Event Cards) and Management Dashboard are included in the `frontend/event-frontend/screenshot` folder.
 
 ---
 
