@@ -72,7 +72,7 @@ A **Frappe Framework-based Event Management System** to manage events, venues, a
 
 ## Screenshots
 
-📌 Screenshots of DocTypes and list views are included in the `screenshots/` folder.
+📌 Screenshots of DocTypes and list views are included in the `apps/event_management/event_management/screenshots` folder.
 
 ---
 
